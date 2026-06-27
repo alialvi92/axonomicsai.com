@@ -394,7 +394,7 @@
   /* SCIENCE */
   .science-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1px;
     background: var(--border);
     border-radius: 4px;
@@ -584,6 +584,7 @@
     .compare { grid-template-columns: 1fr; }
     .steps { grid-template-columns: repeat(2, 1fr); }
     .science-grid { grid-template-columns: 1fr; }
+    .science-grid .science-card:nth-child(n) { grid-column: auto; }
     .timeline { grid-template-columns: 1fr; gap: 20px; }
     .timeline::before { display: none; }
     footer { flex-direction: column; gap: 12px; text-align: center; }
@@ -806,11 +807,6 @@
       <div class="science-num">4,500</div>
       <div class="science-title">CENTER-TBI — European TBI cohort</div>
       <div class="science-desc">Multi-site European dataset with detailed outcome labelling across injury severity.</div>
-    </div>
-    <div class="science-card">
-      <div class="science-num">4</div>
-      <div class="science-title">MRI signals that matter</div>
-      <div class="science-desc">Lesion &amp; edema volume · White matter integrity · Cortical volume · Spinal cord signal change. All from standard sequences already collected.</div>
     </div>
   </div>
 </section>
