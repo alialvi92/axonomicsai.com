@@ -439,6 +439,62 @@
     margin-bottom: 40px;
   }
 
+  /* CONTACT FORM */
+  .contact-form {
+    max-width: 520px;
+    margin: 0 auto;
+    text-align: left;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .form-field label {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .form-field input,
+  .form-field textarea {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  .form-field input:focus,
+  .form-field textarea:focus {
+    border-color: var(--accent-border);
+  }
+  .form-field textarea { resize: vertical; min-height: 100px; }
+  .form-submit { width: 100%; margin-top: 8px; }
+  .form-success {
+    display: none;
+    padding: 16px;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent-border);
+    border-radius: 2px;
+    color: var(--accent);
+    font-size: 14px;
+    text-align: center;
+    margin-top: 16px;
+  }
+  @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
   /* TEAM */
   .team-grid {
     display: grid;
@@ -824,10 +880,28 @@
   <p class="reveal reveal-delay-2">
     Proof-point and revenue. No prospective trial required to get started.
   </p>
-  <div class="cta-row reveal reveal-delay-3" style="justify-content:center;">
-    <a href="mailto:hello@axonomicsai.com" class="btn-primary">Get in touch</a>
-    <a href="#how" class="btn-secondary">How it works</a>
-  </div>
+  <form class="contact-form reveal reveal-delay-3" action="https://formspree.io/f/mdarzaqa" method="POST" id="pilot-form">
+    <div class="form-row">
+      <div class="form-field">
+        <label for="fname">Name</label>
+        <input type="text" id="fname" name="name" placeholder="Your name" required>
+      </div>
+      <div class="form-field">
+        <label for="forg">Organization</label>
+        <input type="text" id="forg" name="organization" placeholder="Company / sponsor">
+      </div>
+    </div>
+    <div class="form-field">
+      <label for="femail">Email</label>
+      <input type="email" id="femail" name="email" placeholder="you@company.com" required>
+    </div>
+    <div class="form-field">
+      <label for="fmsg">What can we help with?</label>
+      <textarea id="fmsg" name="message" placeholder="Tell us about your trial or data set (optional)"></textarea>
+    </div>
+    <button type="submit" class="btn-primary form-submit">Request a pilot</button>
+    <div class="form-success" id="form-success">Thanks — we'll be in touch within one business day.</div>
+  </form>
 </div>
 
 <footer>
@@ -855,6 +929,35 @@
       el.classList.add('visible');
     });
   }, 100);
+
+  // Formspree AJAX submit
+  const pilotForm = document.getElementById('pilot-form');
+  if (pilotForm) {
+    pilotForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = pilotForm.querySelector('button[type="submit"]');
+      btn.textContent = 'Sending…';
+      btn.disabled = true;
+      try {
+        const res = await fetch(pilotForm.action, {
+          method: 'POST',
+          body: new FormData(pilotForm),
+          headers: { Accept: 'application/json' }
+        });
+        if (res.ok) {
+          pilotForm.reset();
+          document.getElementById('form-success').style.display = 'block';
+          btn.textContent = 'Sent';
+        } else {
+          btn.textContent = 'Error — try again';
+          btn.disabled = false;
+        }
+      } catch {
+        btn.textContent = 'Error — try again';
+        btn.disabled = false;
+      }
+    });
+  }
 </script>
 </body>
 </html>
